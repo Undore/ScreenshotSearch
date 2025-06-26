@@ -1,12 +1,10 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 .idea
-anime
+video
 samples
-samples_full
 results.json
 poetry.lock
-anime_full
 *.py[cod]
 *$py.class
 .venv

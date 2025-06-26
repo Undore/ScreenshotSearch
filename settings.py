@@ -1,7 +1,7 @@
 import os
 
 ORIGINALS_FOLDER_NAME = "samples"
-COMPARING_FOLDER_NAME = "anime"
+COMPARING_FOLDER_NAME = "video"
 
 LOGGING = {
     "frame_compiler": "INFO",
