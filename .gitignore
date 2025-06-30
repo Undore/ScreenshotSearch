@@ -1,10 +1,16 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 .idea
-video
+anime
 samples
+samples_full
 results.json
+temp
+samples_
+video__
+video
 poetry.lock
+anime_full
 *.py[cod]
 *$py.class
 .venv

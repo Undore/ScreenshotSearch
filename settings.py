@@ -10,7 +10,8 @@ LOGGING = {
     "main": "DEBUG"
 }
 
-MAX_WORKERS = 10
+BUFFER_IMAGES = True  # Store all frames in a temp folder before scanning
+CLEAR_TEMP = False #  Clear cache after exiting
 
 PROTOCOLS = {
     "ssim": {
@@ -22,7 +23,7 @@ PROTOCOLS = {
         "use": False
     },
     "template": {
-        "similarity": 0.395,
+        "similarity": 0.385,
         "use": True
     }
 }
