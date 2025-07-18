@@ -2,9 +2,10 @@ import base64
 import os.path
 import re
 import shutil
+from datetime import datetime
 from functools import cached_property
 from logging import Logger
-from typing import Generator
+from typing import Generator, AsyncGenerator, Any
 
 import cv2
 import numpy as np
@@ -172,7 +173,7 @@ class FrameCompiler:
 
             success, frame = self.vidcap.read()
 
-    async def iterate_frames(self) -> Generator[tuple[int, np.array], None, None]:
+    async def iterate_frames(self) -> AsyncGenerator[tuple[Any, Any], None]:
         """
         Iterate video frames.
         Use buffering if enabled in settings.
@@ -187,3 +188,36 @@ class FrameCompiler:
 
         async for fi, f in coro:
             yield fi, f
+
+    def get_frame_at_time(self, time_str: str) -> np.ndarray:
+        """
+        Get frame at specific timecode.
+
+        :param time_str: Time string, e.g. "0:00:09.080000"
+        :return: Frame as ndarray
+        """
+        if not self.vidcap.isOpened():
+            raise RuntimeError(f"Video {self.video_path} is not opened")
+
+        try:
+            if '.' in time_str:
+                dt = datetime.strptime(time_str, "%H:%M:%S.%f")
+            else:
+                dt = datetime.strptime(time_str, "%H:%M:%S")
+        except ValueError:
+            raise ValueError(f"Invalid time format: {time_str}")
+
+        total_seconds = dt.hour * 3600 + dt.minute * 60 + dt.second + dt.microsecond / 1_000_000
+
+        frame_index = int(round(total_seconds * self.fps))
+
+        if frame_index >= self.total_frames:
+            frame_index = self.total_frames - 1
+
+        self.vidcap.set(cv2.CAP_PROP_POS_FRAMES, frame_index)
+
+        success, frame = self.vidcap.read()
+        if not success:
+            raise RuntimeError(f"Could not read frame at {time_str} (frame {frame_index})")
+
+        return frame

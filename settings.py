@@ -10,7 +10,7 @@ LOGGING = {
     "main": "DEBUG"
 }
 
-BUFFER_IMAGES = True  # Store all frames in a temp folder before scanning
+BUFFER_IMAGES = False  # Store all frames in a temp folder before scanning
 CLEAR_TEMP = False #  Clear cache after exiting
 
 PROTOCOLS = {
@@ -23,7 +23,7 @@ PROTOCOLS = {
         "use": False
     },
     "template": {
-        "similarity": 0.385,
+        "similarity": 0.395,
         "use": True
     }
 }

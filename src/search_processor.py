@@ -1,7 +1,7 @@
 import asyncio
 from datetime import timedelta
 from logging import Logger
-from typing import Generator
+from typing import Generator, AsyncGenerator
 
 import numpy as np
 from PIL import Image
@@ -21,7 +21,7 @@ class SearchProcessor:
         self.originals = originals
         self.comparing = comparing
 
-    async def search(self) -> Generator[tuple[str, str, str, timedelta], None, None]:
+    async def search(self) -> AsyncGenerator[tuple[str, str, str, timedelta] | None]:
         """
         Search for original/comparing matches and yield every result.
 

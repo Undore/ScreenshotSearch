@@ -18,9 +18,10 @@ class FrameMatchProcessor:
         self.comparing: np.array = comparing
 
 
-    def compare_ssim(self, similarity: float = 0.95) -> bool:
+    def compare_ssim(self, similarity: float = 0.95, return_score: bool = False) -> bool | float:
         """
         Compare instance frames using SSIM
+        :param return_score: Return score
         :param similarity: How similar frames should be to return True
         :return: True if matching, False if not
         """
@@ -35,11 +36,15 @@ class FrameMatchProcessor:
 
         self.logger.debug(f"SSIM score: {score:.2f}")
 
+        if return_score:
+            return score
+
         return score >= similarity
 
-    def compare_phash(self, similarity: float = 0.95) -> bool:
+    def compare_phash(self, similarity: float = 0.95, return_score: bool = False) -> bool | float:
         """
         Compare instance frames using PHash
+        :param return_score: Return score
         :param similarity: How similar frames should be to return True
         :return: True if similar
         """
@@ -54,11 +59,16 @@ class FrameMatchProcessor:
 
         self.logger.debug(f"PHash score: {(hash1 - hash2)} out of {threshold_distance} ({round((hash1 - hash2) / threshold_distance, 2):.2f}%)")
 
+
+        if return_score:
+            return hash1 - hash2
+
         return (hash1 - hash2) <= threshold_distance
 
-    def compare_template(self, threshold: float = 0.9) -> bool:
+    def compare_template(self, threshold: float = 0.9, return_score: bool = False) -> bool | float:
         """
         Match a template image inside a larger frame.
+        :param return_score: Return score
         :param threshold: Similarity threshold [0..1]
         :return: True if match found
         """
@@ -69,5 +79,8 @@ class FrameMatchProcessor:
         min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
 
         self.logger.debug(f"Template match score: {max_val:.2f}")
+
+        if return_score:
+            return max_val
 
         return max_val >= threshold
